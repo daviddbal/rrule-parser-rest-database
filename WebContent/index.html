@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>RRULE Parser</title>
+	<meta name="description" content="Recurrencd Rule (RRULE) parser based in iCalendar RFC 5545 specification">
+	<meta name="keywords" content="rrule, icalendar, RFC 5545, recurrence rule, icalendarfx, java, jfxtras">
+	<meta name="author" content="David Bal">
+	<link rel="stylesheet" type="text/css" href="css/rrule.css"/>
+	<script type="text/javascript" src="js/rrule.js"></script>
+</head>
+
+<body>
+	<h1>RRULE Parser</h1>
+	<h4>Introduction</h4>
+	<p>This is an iCalendar RRULE (recurrence rule) parser based on <a href="https://tools.ietf.org/html/rfc5545">RFC 5545</a> .
+	It generates a list of date or date/time values defined by RRULE and DTSTART values.  It uses iCalendarFx, an iCalendar Java library from <a href="http://jfxtras.org">JFXtras</a>.
+	</p>
+	<h4>Usage</h4>
+	<p>
+		This application can be used two ways:
+		<ol>
+		 	<li>Modify the controls such as repeat frequency, start date, etc. found in the first box.  When they are changed the RRULE and DTSTART properties will automatically modified accordingly.</li>
+		 	<li>Type in a RRULE and DTSTART property manually.  While the controls mentioned above provide only a subset of the <a href="https://tools.ietf.org/html/rfc5545">RFC 5545</a> RRULE elements, you can use all RRULE elements by typing the property manually.</li>
+	 	</ol>
+	 	If you have any comments please feel free to send me an email at <a href="mailto:david.bal37@gmail.com">david.bal37@gmail.com</a>
+	</p>
+	 
+	<div id="builder">
+		Repeat Frequency:
+		<select required id="freq" onchange="buildRRule()">
+			<optgroup label="Day based">
+				<option value="DAILY">Daily</option>
+				<option value="WEEKLY">Weekly</option>
+				<option value="MONTHLY">Monthly</option>
+				<option value="YEARLY">Yearly</option>
+			</optgroup>
+			<optgroup label="Day fraction based">
+				<option value="SECONDLY">Secondly</option>
+				<option value="MINUTELY">Minutely</option>
+				<option value="HOURLY">Hourly</option>
+			</optgroup>
+		</select>
+		<br>
+		Repeats every<input type="number" id="interval" onchange="buildRRule()" min="1" max="1000" value="1"><span id='intervalType'></span><br>
+		<span id='dayOfWeek' class="options">
+			<input type="checkbox" id="sundayCheckbox" onchange="buildRRule()" value="SUNDAY">Sun
+	  		<input type="checkbox" id="mondayCheckbox" onchange="buildRRule()" value="MONDAY" >Mon
+			<input type="checkbox" id="tuesdayCheckbox" onchange="buildRRule()" value="TUESDAY">Tue
+	  		<input type="checkbox" id="wednesdayCheckbox" onchange="buildRRule()" value="WEDNESDAY" >Wed
+			<input type="checkbox" id="thursdayCheckbox" onchange="buildRRule()" value="THURSDAY">Thu
+	  		<input type="checkbox" id="fridayCheckbox" onchange="buildRRule()" value="FRIDAY" >Fri
+	  		<input type="checkbox" id="saturdayCheckbox" onchange="buildRRule()" value="SATURDAY" >Sat<br>
+  		</span>
+  
+		<span id='monthlyOptions' class="options">
+			<input type="radio" id="dayOfMonthCheckBox" name="monthlyRadioButtons" onchange="buildRRule()" value="DAY_OF_MONTH" checked>Day of month
+	  		<input type="radio" id="dayOfWeekCheckBox" name="monthlyRadioButtons" onchange="buildRRule()" value="DAY_OF_WEEK" >Day of week<br>
+  		</span>
+  		
+		Start date<input type="date" id="dateStart" onchange="buildDTStart()">
+		Start time<input type="time" id="timeStart" step="1" onchange="buildDTStart()"><br>
+		
+		Ends:
+		<input type="radio" id="neverCheckBox" name="endRadioButtons" onchange="buildRRule()" checked>Never
+  		<input type="radio" id="afterCheckBox" name="endRadioButtons" onchange="buildRRule()" >After
+  		<input type="radio" id="onCheckBox" name="endRadioButtons" onchange="buildRRule()">On<br>
+  		<span id="countSpan" class="options">
+  			<input type="number" id="count" onchange="buildRRule()" min="1" max="1000" value="10">
+  			<span id='countType'></span><br>
+  		</span>
+  		<span id="untilSpan" class="options" style="display:false">
+  			End date<input type="date" id="until" onchange="buildRRule()"><br>
+  		</span>
+		Max Recurrences Displayed<input type="number" id="limit" min="1" max="1000" value="50"><br>
+	</div>
+	<div id="rrule">
+		RRULE <input type="text" size="53" id="rruleContent" value="RRULE:FREQ=DAILY" ><br>
+		DTSTART <input type="text" size="50" id="dateTimeStart" value="DTSTART:20170101T120000" ><br>
+	</div>
+	<button id="submitButton" onclick="loadXMLDoc()">Submit</button>
+	<br>
+	
+	<!-- Execute Javascript -->
+	<script type="text/javascript">
+		initDate();
+		refreshRRuleAndDTStart();
+		loadXMLDoc();
+	</script>
+	<h3>Resulting Recurrences Series:</h3>
+	<div id=recurrences>
+		<span id='result'></span>
+	</div>
+</body>
+</html>
