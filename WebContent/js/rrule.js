@@ -24,8 +24,8 @@ function loadXMLDoc()
 	xmlhttp.open("POST", "RRuleServlet3");
 	xmlhttp.setRequestHeader('Content-type', "application/x-www-form-urlencoded");
     var rruleContent = document.getElementById('rruleContent').value;
-    var dateTimeStart = document.getElementById('dateTimeStart').value
-    var limit = document.getElementById('limit').value
+    var dateTimeStart = document.getElementById('dateTimeStart').value;
+    var limit = document.getElementById('limit').value;
 	xmlhttp.send("rruleContent=" + rruleContent + "&dateTimeStart=" + dateTimeStart + "&limit=" + limit);
 }
 
