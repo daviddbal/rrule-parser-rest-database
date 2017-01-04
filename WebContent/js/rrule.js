@@ -1,33 +1,68 @@
 /**
  * 
  */
-function loadXMLDoc()
-{
-	var xmlhttp;
-	if (window.XMLHttpRequest) {
-		// code for IE7+, Firefox, Chrome, Opera, Safari
-		xmlhttp = new XMLHttpRequest();
-		} else {
-			xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-	}
-	xmlhttp.onreadystatechange = function() {
-		if (xmlhttp.readyState == 4) {
-			if (xmlhttp.status = 200){
-				document.getElementById("result").innerHTML = xmlhttp.responseText;
-				} else
-				{
-					alert("Action can't be performed");
-				}
-			}
-		};
+//function loadXMLDoc()
+//{
+//	var xmlhttp;
+//	if (window.XMLHttpRequest) {
+//		// code for IE7+, Firefox, Chrome, Opera, Safari
+//		xmlhttp = new XMLHttpRequest();
+//		} else {
+//			xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+//	}
+//	xmlhttp.onreadystatechange = function() {
+//		if (xmlhttp.readyState == 4) {
+//			if (xmlhttp.status = 200){
+//				document.getElementById("result").innerHTML = xmlhttp.responseText;
+//				} else
+//				{
+//					alert("Action can't be performed");
+//				}
+//			}
+//		};
+//
+//	xmlhttp.open("POST", "RRuleServlet3");
+//	xmlhttp.setRequestHeader('Content-type', "application/x-www-form-urlencoded");
+//    var rruleContent = document.getElementById('rruleContent').value;
+//    var dtstartContent = document.getElementById('dtstartContent').value;
+//    var maxRecurrences = document.getElementById('maxRecurrences').value;
+//	xmlhttp.send("rruleContent=" + rruleContent + "&dtstartContent=" + dtstartContent + "&maxRecurrences=" + maxRecurrences);
+//}
 
-	xmlhttp.open("POST", "RRuleServlet3");
-	xmlhttp.setRequestHeader('Content-type', "application/x-www-form-urlencoded");
-    var rruleContent = document.getElementById('rruleContent').value;
-    var dateTimeStart = document.getElementById('dateTimeStart').value;
-    var limit = document.getElementById('limit').value;
-	xmlhttp.send("rruleContent=" + rruleContent + "&dateTimeStart=" + dateTimeStart + "&limit=" + limit);
+var rootURL = "http://localhost:8080/RRuleRest1/rest/rrule";
+
+/*
+ * Submit RRULE and DTSTART
+ */
+function postRRule() {
+	console.log('post RRULE');
+	$.ajax({
+		type: 'POST',
+		contentType: 'application/json',
+		url: rootURL,
+		dataType: "json",
+		data: formToJSON(),
+		success: function(data, textStatus, jqXHR){
+			alert('RRULE created successfully');
+		},
+		error: function(jqXHR, textStatus, errorThrown){
+			alert('RRULE error: ' + textStatus);
+		}
+	});
 }
+
+//Helper function to serialize all the form fields into a JSON string
+function formToJSON() {
+	return JSON.stringify({
+		"rruleContent": $('#rruleContent').val(), 
+		"dtstartContent": $('#dtstartContent').val(),
+		"maxRecurrences": $('#maxRecurrences').val()
+		});
+}
+
+/*
+ * Form Controls
+ */
 
 /*
  * Initialize start date picker
@@ -278,7 +313,7 @@ function makeIntervalType(freq, value)
 }
 
 /*
- * Create DTSTART property for dateTimeStart
+ * Create DTSTART property for dtstartContent
  */
 function buildDTStart()
 {
@@ -293,10 +328,10 @@ function buildDTStart()
 	} else
 	{
     	document.getElementById("submitButton").disabled = false;
-	    var dateTimeStartString = "DTSTART"
+	    var dtstartContentString = "DTSTART"
 	    if (timeString === "")
 		{
-			dateTimeStartString += ";VALUE=DATE" + ":" + dateString;
+			dtstartContentString += ";VALUE=DATE" + ":" + dateString;
 		} else
 		{
 			timeString = timeString.replace(":", ""); // remove minutes :
@@ -307,10 +342,10 @@ function buildDTStart()
 			{
 				timeString += "00"; // add 2 zeros is seconds isn't present
 			}
-			dateTimeStartString += ":" + dateString + "T" + timeString;
+			dtstartContentString += ":" + dateString + "T" + timeString;
 		}
 	}
-	document.getElementById('dateTimeStart').value = dateTimeStartString;
+	document.getElementById('dtstartContent').value = dtstartContentString;
 }
 
 function weekOrdinalInMonth(date)

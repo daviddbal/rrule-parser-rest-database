@@ -1,8 +1,9 @@
-package net.balsoftware.rest;
+package net.balsoftware.resources;
 
 import java.util.stream.Collectors;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -15,7 +16,7 @@ import net.balsoftware.bean.RRuleBean;
 /**
  * Servlet implementation
  */
-@Path("/RRuleResource")
+@Path("/rrule")
 public class RRuleResource {
 	private static final String LS = "<br>";
 	
@@ -24,16 +25,13 @@ public class RRuleResource {
 	@Produces({ MediaType.TEXT_PLAIN})
 	protected String doPost(RRuleBean request)
 	{
-
-    	String rruleContent = request.getParameter("rruleContent");
-		int limit = Integer.parseInt(request.getParameter("limit"));
-		DateTimeStart dateTimeStart = DateTimeStart.parse(request.getParameter("dateTimeStart"));
+		DateTimeStart dateTimeStart = DateTimeStart.parse(request.getDtstartContent());
 		
 		String recurrences;
 		try {
-		RecurrenceRule rrule = RecurrenceRule.parse(rruleContent);
+		RecurrenceRule rrule = RecurrenceRule.parse(request.getRruleContent());
 		recurrences = rrule.getValue().streamRecurrences(dateTimeStart.getValue())
-				.limit(limit)
+				.limit(request.getMaxRecurrences())
 				.map(t -> t.toString())
 				.collect(Collectors.joining(LS));
 		} catch (Exception e)
@@ -41,12 +39,26 @@ public class RRuleResource {
 			recurrences = "Invalid";
 		}
 		return recurrences;
-//		response.setContentType("text/plain");
-//		PrintWriter out = response.getWriter();
-//		out.print("Recurrence Series:" + LS + rrules);
-//		out.print(recurrences);
+	}
+	
+	@GET
+	@Produces({ MediaType.TEXT_PLAIN})
+	protected String doGet()
+	{
+		DateTimeStart dateTimeStart = DateTimeStart.parse("DTSTART:20170104T131901");
 		
-		// TODO - PUT REQUEST INTO DATABASE
+		String recurrences;
+		try {
+		RecurrenceRule rrule = RecurrenceRule.parse("RRULE:FREQ=DAILY");
+		recurrences = rrule.getValue().streamRecurrences(dateTimeStart.getValue())
+				.limit(10)
+				.map(t -> t.toString())
+				.collect(Collectors.joining(LS));
+		} catch (Exception e)
+		{
+			recurrences = "Invalid";
+		}
+		return recurrences;
 	}
 
 //	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
