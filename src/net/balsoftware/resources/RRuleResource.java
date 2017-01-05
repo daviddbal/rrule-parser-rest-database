@@ -4,6 +4,7 @@ import java.util.stream.Collectors;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -15,14 +16,14 @@ import net.balsoftware.bean.RRuleBean;
 /**
  * Servlet implementation
  */
-@Path("parse")
+@Path("/parse")
 public class RRuleResource {
 	private static final String LS = "<br>";
 	
-	@GET
-	@Consumes(MediaType.APPLICATION_JSON)
+	@POST
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	@Produces(MediaType.TEXT_PLAIN)
-	protected String doPost(RRuleBean request)
+	public String doPost(RRuleBean request)
 	{
 //		DateTimeStart dateTimeStart = DateTimeStart.parse("DTSTART:20170104T131901");
 //		
@@ -40,8 +41,8 @@ public class RRuleResource {
 //		return recurrences;
 		
 		DateTimeStart dateTimeStart = DateTimeStart.parse(request.getDtstartContent());
-//		int limit = Integer.parseInt(request.getMaxRecurrences());
-		int limit = request.getMaxRecurrences();
+		int limit = Integer.parseInt(request.getMaxRecurrences());
+//		int limit = request.getMaxRecurrences();
 		String recurrences;
 		try {
 		RecurrenceRule rrule = RecurrenceRule.parse(request.getRruleContent());
@@ -54,6 +55,14 @@ public class RRuleResource {
 			recurrences = "Invalid";
 		}
 		return recurrences;
+	}
+	
+	@POST
+	@Consumes(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.TEXT_PLAIN)
+	public String doPost(String request)
+	{
+		return request;
 	}
 	
 //	@POST

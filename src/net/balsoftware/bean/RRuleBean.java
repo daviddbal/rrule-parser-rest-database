@@ -7,7 +7,7 @@ public class RRuleBean {
 
 	private String rruleContent;
 	private String dtstartContent;
-	private int maxRecurrences;
+	private String maxRecurrences;
 	public String getRruleContent() {
 		return rruleContent;
 	}
@@ -20,10 +20,10 @@ public class RRuleBean {
 	public void setDtstartContent(String dtstartContent) {
 		this.dtstartContent = dtstartContent;
 	}
-	public int getMaxRecurrences() {
+	public String getMaxRecurrences() {
 		return maxRecurrences;
 	}
-	public void setMaxRecurrences(int maxRecurrences) {
+	public void setMaxRecurrences(String maxRecurrences) {
 		this.maxRecurrences = maxRecurrences;
 	}
 }
