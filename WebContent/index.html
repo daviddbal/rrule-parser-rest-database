@@ -79,13 +79,14 @@
 		RRULE <input type="text" size="53" id="rruleContent" value="RRULE:FREQ=DAILY" ><br>
 		DTSTART <input type="text" size="50" id="dtstartContent" value="DTSTART:20170101T120000" ><br>
 	</div>
-	<button id="submitButton" onclick="postRRule()">Submit</button>
+	<button id="submitButton" onclick="loadXMLDoc()">Submit</button>
 	<br>
 	
 	<!-- Execute Javascript -->
 	<script type="text/javascript">
 		initDate();
 		refreshRRuleAndDTStart();
+		loadXMLDoc()
 	</script>
 	<h3>Resulting Recurrences Series:</h3>
 	<div id=recurrences>

@@ -1,5 +1,8 @@
 package net.balsoftware.bean;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class RRuleBean {
 
 	private String rruleContent;
