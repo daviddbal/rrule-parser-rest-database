@@ -62,7 +62,7 @@ public class RRuleDao {
 	
 	public RRule addRRule(RRule rrule)
 	{
-        String sql = "INSERT INTO rrule.history (rrule_content, dtstart_content, max_recurrences, created) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO rrule.history (rrule_content, dtstart_content, max_recurrences, created, ip_address) VALUES (?, ?, ?, ?, ?)";
         Connection c = null;
         System.out.println("GET CONNECTION1");
         try {
@@ -76,12 +76,14 @@ public class RRuleDao {
 //            Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now());
 //            ps.setTimestamp(4, timestamp);
             ps.setString(4, timestamp.toString());
+            ps.setString(5, rrule.getIpAddress());
             System.out.println("ps:" + ps);
 //            Instant instant = rrule.getCreated().atZone(ZoneId.systemDefault()).toInstant();
 //            Date date = Date.from(instant);
 //            ps.setDate(4, date);
             System.out.println("created: " + rrule.getCreated() + " " + timestamp);
-            ps.executeUpdate();
+            int outcome = ps.executeUpdate();
+            System.out.println("new row:" + outcome);
 //            ResultSet rs = ps.getGeneratedKeys();
 //            rs.next();
             // Update the id in the returned object. This is important as this value must be returned to the client.

@@ -1,6 +1,5 @@
 package net.balsoftware.resources;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.ws.rs.Consumes;
@@ -25,38 +24,41 @@ public class RRuleResource {
 	
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<String> doPost(RRule request)
+//	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.TEXT_PLAIN)
+//	public List<String> doPost(RRule request)
+	public String doPost(RRule request)
 	{
 		DateTimeStart dateTimeStart = DateTimeStart.parse(request.getDtstartContent());
 //		int limit = Integer.parseInt(request.getMaxRecurrences());
 		int limit = request.getMaxRecurrences();
-//		String recurrences;
-//		try {
-//		RecurrenceRule rrule = RecurrenceRule.parse(request.getRruleContent());
-//		recurrences = rrule.getValue().streamRecurrences(dateTimeStart.getValue())
-//				.limit(limit)
-//				.map(t -> t.toString())
-//				.collect(Collectors.joining(LS));
-//		} catch (Exception e)
-//		{
-//			recurrences = "Invalid";
-//		}
-//		return recurrences;
-		
-		List<String> recurrences;
+		String recurrences;
 		try {
 		RecurrenceRule rrule = RecurrenceRule.parse(request.getRruleContent());
 		recurrences = rrule.getValue().streamRecurrences(dateTimeStart.getValue())
 				.limit(limit)
 				.map(t -> t.toString())
-				.collect(Collectors.toList());
+				.collect(Collectors.joining(LS));
 		} catch (Exception e)
 		{
-			recurrences = null;
+			recurrences = "Invalid";
 		}
-		System.out.println("created:" + request);
 		service.addRRule(request);
 		return recurrences;
+		
+//		List<String> recurrences;
+//		try {
+//		RecurrenceRule rrule = RecurrenceRule.parse(request.getRruleContent());
+//		recurrences = rrule.getValue().streamRecurrences(dateTimeStart.getValue())
+//				.limit(limit)
+//				.map(t -> t.toString())
+//				.collect(Collectors.toList());
+//		} catch (Exception e)
+//		{
+//			recurrences = null;
+//		}
+//		System.out.println("created:" + request);
+//		service.addRRule(request);
+//		return recurrences;
 	}
 }
