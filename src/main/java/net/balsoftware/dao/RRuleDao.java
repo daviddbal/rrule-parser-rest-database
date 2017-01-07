@@ -82,7 +82,7 @@ public class RRuleDao {
 //            Date date = Date.from(instant);
 //            ps.setDate(4, date);
             System.out.println("created: " + rrule.getCreated() + " " + timestamp);
-            if (! rrule.getIpAddress().equals("123")) // skip when null (means posting default value)
+            if (rrule.getIpAddress() != null) // skip when null (means posting default value)
             {
             	int outcome = ps.executeUpdate();
             	System.out.println("new row:" + outcome);

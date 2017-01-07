@@ -1,4 +1,4 @@
-var ipAddress = "123";
+var ipAddress = null;
 /**
  * 
  */
@@ -72,23 +72,20 @@ var rootURL = "http://localhost:8080/RRuleRest1/webapi/parse";
  */
 function postRRule() {
 	console.log('post RRULE' + formToJSON() + ipAddress);
-//	if (ipAddress != null) // skip first post (has default settings_
-//	{
-		$.ajax({
-			type: 'GET',
-			contentType: 'application/json',
-			url: rootURL,
-			dataType: "text",
-			data: formToJSON(),
-			success: renderList,
-	//		success: function(data, textStatus, jqXHR){
-	//			alert('RRULE created successfully');
-	//		},
-			error: function(jqXHR, textStatus, errorThrown){
-				alert('RRULE error: ' + textStatus);
-			}
-		});
-//	}
+	$.ajax({
+		type: 'POST',
+		contentType: 'application/json',
+		url: rootURL,
+		dataType: "text",
+		data: formToJSON(),
+		success: renderList,
+//		success: function(data, textStatus, jqXHR){
+//			alert('RRULE created successfully');
+//		},
+		error: function(jqXHR, textStatus, errorThrown){
+			alert('RRULE error: ' + textStatus);
+		}
+	});
 }
 
 $.get('http://jsonip.com/', function(r)
