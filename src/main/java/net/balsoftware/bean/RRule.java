@@ -11,6 +11,33 @@ public class RRule {
 	private String dtstartContent;
 	private int maxRecurrences;
 	private LocalDateTime created;
+	private String ipAddress;
+	
+	public RRule()
+	{
+		super();
+		created = LocalDateTime.now();
+	}
+	
+	public RRule(String rruleContent, String dtstartContent, int maxRecurrences, String ipAddress) {
+		this();
+		this.rruleContent = rruleContent;
+		this.dtstartContent = dtstartContent;
+		this.maxRecurrences = maxRecurrences;
+		this.ipAddress = ipAddress;
+	}
+	@Override
+	public String toString() {
+		return "RRule [rruleContent=" + rruleContent + ", dtstartContent=" + dtstartContent + ", maxRecurrences="
+				+ maxRecurrences + ", created=" + created + ", ipAddress=" + ipAddress + "]";
+	}
+
+	public String getIpAddress() {
+		return ipAddress;
+	}
+	public void setIpAddress(String ipAddress) {
+		this.ipAddress = ipAddress;
+	}
 	public LocalDateTime getCreated() {
 		return created;
 	}

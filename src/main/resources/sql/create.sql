@@ -1,8 +1,9 @@
 CREATE SCHEMA `rrule` ;
 CREATE TABLE `rrule`.`history` (
   `uid` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `rruleContent` VARCHAR(80) NOT NULL,
-  `dtstartContent` VARCHAR(45) NOT NULL,
-  `maxRecurrences` INT UNSIGNED NOT NULL,
+  `rrule_content` VARCHAR(80) NOT NULL,
+  `dtstart_content` VARCHAR(45) NOT NULL,
+  `max_recurrences` INT UNSIGNED NOT NULL,
   `created` DATETIME NOT NULL,
+  `ip_address` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`uid`));

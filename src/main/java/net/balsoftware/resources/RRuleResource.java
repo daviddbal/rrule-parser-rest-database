@@ -55,6 +55,7 @@ public class RRuleResource {
 		{
 			recurrences = null;
 		}
+		System.out.println("created:" + request);
 		service.addRRule(request);
 		return recurrences;
 	}

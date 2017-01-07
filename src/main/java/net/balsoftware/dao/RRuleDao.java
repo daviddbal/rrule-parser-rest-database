@@ -62,7 +62,7 @@ public class RRuleDao {
 	
 	public RRule addRRule(RRule rrule)
 	{
-        String sql = "INSERT INTO rrule.history (rruleContent, dtstartContent, maxRecurrences, created) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO rrule.history (rrule_content, dtstart_content, max_recurrences, created) VALUES (?, ?, ?, ?)";
         Connection c = null;
         System.out.println("GET CONNECTION1");
         try {
@@ -73,8 +73,14 @@ public class RRuleDao {
             ps.setString(2, rrule.getDtstartContent());
             ps.setInt(3, rrule.getMaxRecurrences());
             Timestamp timestamp = Timestamp.valueOf(rrule.getCreated());
-            ps.setTimestamp(4, timestamp);
-            
+//            Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now());
+//            ps.setTimestamp(4, timestamp);
+            ps.setString(4, timestamp.toString());
+            System.out.println("ps:" + ps);
+//            Instant instant = rrule.getCreated().atZone(ZoneId.systemDefault()).toInstant();
+//            Date date = Date.from(instant);
+//            ps.setDate(4, date);
+            System.out.println("created: " + rrule.getCreated() + " " + timestamp);
             ps.executeUpdate();
 //            ResultSet rs = ps.getGeneratedKeys();
 //            rs.next();
@@ -98,7 +104,7 @@ public class RRuleDao {
 	
 	public RRule updateRRule(RRule rrule)
 	{
-        String sql = "UPDATE rrule.history SET rruleContent=?, dtstartContent=?, maxRecurrences=?, created=? WHERE uid=?";
+        String sql = "UPDATE rrule.history SET rrule_content=?, dtstart_content=?, max_recurrences=?, created=? WHERE uid=?";
         Connection c = null;
         try {
             c = ConnectionHelper.getConnection();
@@ -138,9 +144,10 @@ public class RRuleDao {
 	
     private RRule processRow(ResultSet rs) throws SQLException {
     	RRule rrule = new RRule();
-    	rrule.setRruleContent(rs.getString("rruleContent"));
-    	rrule.setDtstartContent(rs.getString("dtstartContent"));
-    	rrule.setMaxRecurrences(rs.getInt("maxRecurrences"));
+    	rrule.setRruleContent(rs.getString("rrule_content"));
+    	rrule.setDtstartContent(rs.getString("dtstart_content"));
+    	rrule.setMaxRecurrences(rs.getInt("max_recurrences"));
+    	rrule.setIpAddress(rs.getString("ip_address"));
     	Date date = rs.getDate("created");
     	rrule.setCreated(LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()));
         return rrule;

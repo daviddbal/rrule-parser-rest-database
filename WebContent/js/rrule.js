@@ -34,6 +34,12 @@ function loadXMLDoc()
 
 var rootURL = "http://localhost:8080/RRuleRest1/webapi/parse";
 
+var ipAddress;
+$.get('http://jsonip.com/', function(r)
+		{
+			console.log(r.ip);
+			ipAddress = r.ip;
+		});
 ///*
 // * Submit RRULE and DTSTART
 // */
@@ -81,7 +87,8 @@ function formToJSON() {
 	return JSON.stringify({
 		"rruleContent": $('#rruleContent').val(), 
 		"dtstartContent": $('#dtstartContent').val(),
-		"maxRecurrences": $('#maxRecurrences').val()
+		"maxRecurrences": $('#maxRecurrences').val(),
+		"ipAddress": ipAddress
 		});
 }
 
