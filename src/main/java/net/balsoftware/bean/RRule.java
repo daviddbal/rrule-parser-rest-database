@@ -1,13 +1,22 @@
 package net.balsoftware.bean;
 
+import java.time.LocalDateTime;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class RRuleBean {
+public class RRule {
 
 	private String rruleContent;
 	private String dtstartContent;
 	private int maxRecurrences;
+	private LocalDateTime created;
+	public LocalDateTime getCreated() {
+		return created;
+	}
+	public void setCreated(LocalDateTime created) {
+		this.created = created;
+	}
 	public String getRruleContent() {
 		return rruleContent;
 	}

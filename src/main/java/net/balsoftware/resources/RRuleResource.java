@@ -11,7 +11,8 @@ import javax.ws.rs.core.MediaType;
 
 import jfxtras.icalendarfx.properties.component.recurrence.RecurrenceRule;
 import jfxtras.icalendarfx.properties.component.time.DateTimeStart;
-import net.balsoftware.bean.RRuleBean;
+import net.balsoftware.bean.RRule;
+import net.balsoftware.service.RRuleService;
 
 /**
  * Servlet implementation
@@ -19,11 +20,13 @@ import net.balsoftware.bean.RRuleBean;
 @Path("/parse")
 public class RRuleResource {
 	private static final String LS = "<br>";
+	private RRuleService service = new RRuleService();
+	
 	
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<String> doPost(RRuleBean request)
+	public List<String> doPost(RRule request)
 	{
 		DateTimeStart dateTimeStart = DateTimeStart.parse(request.getDtstartContent());
 //		int limit = Integer.parseInt(request.getMaxRecurrences());
@@ -52,6 +55,7 @@ public class RRuleResource {
 		{
 			recurrences = null;
 		}
+		service.addRRule(request);
 		return recurrences;
 	}
 }
