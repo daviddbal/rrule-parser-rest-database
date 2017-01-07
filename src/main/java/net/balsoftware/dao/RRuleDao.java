@@ -82,8 +82,11 @@ public class RRuleDao {
 //            Date date = Date.from(instant);
 //            ps.setDate(4, date);
             System.out.println("created: " + rrule.getCreated() + " " + timestamp);
-            int outcome = ps.executeUpdate();
-            System.out.println("new row:" + outcome);
+            if (! rrule.getIpAddress().equals("123")) // skip when null (means posting default value)
+            {
+            	int outcome = ps.executeUpdate();
+            	System.out.println("new row:" + outcome);
+            }
 //            ResultSet rs = ps.getGeneratedKeys();
 //            rs.next();
             // Update the id in the returned object. This is important as this value must be returned to the client.

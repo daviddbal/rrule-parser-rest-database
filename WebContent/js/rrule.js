@@ -1,45 +1,43 @@
+var ipAddress = "123";
 /**
  * 
  */
-function loadXMLDoc()
-{
-	var xmlhttp;
-	if (window.XMLHttpRequest) {
-		// code for IE7+, Firefox, Chrome, Opera, Safari
-		xmlhttp = new XMLHttpRequest();
-		} else {
-			xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-	}
-	xmlhttp.onreadystatechange = function() {
-		if (xmlhttp.readyState == 4) {
-			if (xmlhttp.status = 200){
-				document.getElementById("result").innerHTML = xmlhttp.responseText;
-				} else
-				{
-					alert("Action can't be performed");
+function loadXMLDoc() {
+//	if (ipAddress != null)
+//	{
+		var xmlhttp;
+		if (window.XMLHttpRequest) {
+			// code for IE7+, Firefox, Chrome, Opera, Safari
+			xmlhttp = new XMLHttpRequest();
+			} else {
+				xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		xmlhttp.onreadystatechange = function() {
+			if (xmlhttp.readyState == 4) {
+				if (xmlhttp.status = 200){
+					document.getElementById("result").innerHTML = xmlhttp.responseText;
+					} else
+					{
+						alert("Action can't be performed");
+					}
 				}
-			}
-		};
-
-	xmlhttp.open("POST", "webapi/parse");
-//	xmlhttp.setRequestHeader('Content-type', "application/x-www-form-urlencoded");
-	xmlhttp.setRequestHeader('Content-type', "application/json");
-	var data = formToJSON();
-//    var rruleContent = document.getElementById('rruleContent').value;
-//    var dtstartContent = document.getElementById('dtstartContent').value;
-//    var maxRecurrences = document.getElementById('maxRecurrences').value;
-	xmlhttp.send(data);
+			};
+	
+		xmlhttp.open("POST", "webapi/parse");
+	//	xmlhttp.setRequestHeader('Content-type', "application/x-www-form-urlencoded");
+		xmlhttp.setRequestHeader('Content-type', "application/json");
+		var data = formToJSON();
+	//    var rruleContent = document.getElementById('rruleContent').value;
+	//    var dtstartContent = document.getElementById('dtstartContent').value;
+	//    var maxRecurrences = document.getElementById('maxRecurrences').value;
+		xmlhttp.send(data);
 //	xmlhttp.send("rruleContent=" + rruleContent + "&dtstartContent=" + dtstartContent + "&maxRecurrences=" + maxRecurrences);
+//	}
 }
 
 var rootURL = "http://localhost:8080/RRuleRest1/webapi/parse";
 
-var ipAddress = "123";
-$.get('http://jsonip.com/', function(r)
-		{
-			console.log(r.ip);
-			ipAddress = r.ip;
-		});
+
 
 //$(document).ready(function () {
 //    $.getJSON("http://jsonip.com/?callback=?", function (data) {
@@ -73,22 +71,31 @@ $.get('http://jsonip.com/', function(r)
  * Submit RRULE and DTSTART
  */
 function postRRule() {
-	console.log('post RRULE' + formToJSON());
-	$.ajax({
-		type: 'GET',
-		contentType: 'application/json',
-		url: rootURL,
-		dataType: "text",
-		data: formToJSON(),
-		success: renderList,
-//		success: function(data, textStatus, jqXHR){
-//			alert('RRULE created successfully');
-//		},
-		error: function(jqXHR, textStatus, errorThrown){
-			alert('RRULE error: ' + textStatus);
-		}
-	});
+	console.log('post RRULE' + formToJSON() + ipAddress);
+//	if (ipAddress != null) // skip first post (has default settings_
+//	{
+		$.ajax({
+			type: 'GET',
+			contentType: 'application/json',
+			url: rootURL,
+			dataType: "text",
+			data: formToJSON(),
+			success: renderList,
+	//		success: function(data, textStatus, jqXHR){
+	//			alert('RRULE created successfully');
+	//		},
+			error: function(jqXHR, textStatus, errorThrown){
+				alert('RRULE error: ' + textStatus);
+			}
+		});
+//	}
 }
+
+$.get('http://jsonip.com/', function(r)
+		{
+			console.log(r.ip);
+			ipAddress = r.ip;
+		});
 
 //Helper function to serialize all the form fields into a JSON string
 function formToJSON() {
