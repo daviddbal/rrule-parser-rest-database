@@ -37,47 +37,17 @@ function loadXMLDoc() {
 
 var rootURL = "http://localhost:8080/RRuleRest1/webapi/parse";
 
-
-
-//$(document).ready(function () {
-//    $.getJSON("http://jsonip.com/?callback=?", function (data) {
-//        console.log(data);
-//        ipAddress = r.ip;
-//    });
-//});
-
-///*
-// * Submit RRULE and DTSTART
-// */
-//function postRRule() {
-//	console.log('post RRULE' + formToJSON());
-//	$.ajax({
-//		type: 'POST',
-//		contentType: 'application/json',
-//		url: rootURL,
-//		dataType: "text",
-//		data: formToJSON(),
-//		success: renderList,
-////		success: function(data, textStatus, jqXHR){
-////			alert('RRULE created successfully');
-////		},
-//		error: function(jqXHR, textStatus, errorThrown){
-//			alert('RRULE error: ' + textStatus);
-//		}
-//	});
-//}
-
 /*
  * Submit RRULE and DTSTART
  */
-function postRRule() {
+function postRRuleO() {
 	console.log('post RRULE' + formToJSON() + ipAddress);
 	$.ajax({
 		type: 'POST',
 		contentType: 'application/json',
+		data: formToJSON(),
 		url: rootURL,
 		dataType: "text",
-		data: formToJSON(),
 		success: renderList
 //		success: function(data, textStatus, jqXHR){
 //			alert('RRULE created successfully');
@@ -88,11 +58,54 @@ function postRRule() {
 	});
 }
 
-$.get('http://jsonip.com/', function(r)
-		{
-			console.log(r.ip);
-			ipAddress = r.ip;
-		});
+var servletURL = "http://localhost:8080/RRuleRest1/RRuleServlet";
+
+function postRRulem() {
+	console.log('post RRULE servlet' + $("#rruleForm").val() + ", " + $("#rruleContent").val());
+	$.ajax({
+		type: 'POST',
+		contentType: 'application/x-www-form-urlencoded',
+		data: $("#rruleForm").serialize(),
+		url: rootURL,
+		dataType: "text",
+		success: renderList
+//		success: function(data, textStatus, jqXHR){
+//			alert('RRULE created successfully');
+//		},
+//		error: function(jqXHR, textStatus, errorThrown){
+//			alert('RRULE error: ' + textStatus);
+//		}
+	});
+}
+
+function postRRule()
+{
+//	console.log('post RRULE servlet' + $("#rruleForm").serialize());
+		
+	$.ajax({
+		type: 'POST',
+		contentType: 'application/x-www-form-urlencoded',
+		data: $("#rruleForm").serialize(),
+		url: servletURL,
+		dataType: "text",
+		success: renderList
+//		success: function(data, textStatus, jqXHR){
+//			alert('RRULE created successfully');
+//		},
+//		error: function(jqXHR, textStatus, errorThrown){
+//			alert('RRULE error: ' + textStatus);
+//		}
+	});
+}
+
+function getIPAddress()
+{
+	$.get('http://jsonip.com/', function(r)
+			{
+				console.log(r.ip);
+				ipAddress = r.ip;
+			});
+}
 
 //Helper function to serialize all the form fields into a JSON string
 function formToJSON() {
@@ -105,6 +118,7 @@ function formToJSON() {
 				});
 	}
 	console.log('ip:' + ipAddress);
+	console.log($('#rruleContent').val());
 	return JSON.stringify({
 		"rruleContent": $('#rruleContent').val(), 
 		"dtstartContent": $('#dtstartContent').val(),
@@ -127,10 +141,6 @@ function formToJSON() {
 //}
 
 function renderList(data) {
-//	console.log(data);
-//	var data2 = data.replace(/,/g, '<br>');
-//	document.getElementById("result").innerHTML = data2;
-
 	var dataArray = data.split(",");
 	console.log("dataArray.length:" + dataArray.length);
 	// TODO - DELETE ALL ROWS TO START FRESH
@@ -138,8 +148,8 @@ function renderList(data) {
 	var resultTable = document.getElementById("resultTableBody");
 	for(var i = 0; i< dataArray.length; i++)
 	{
-		console.log("list");
-		console.log(i + dataArray[i]);
+//		console.log("list");
+//		console.log(i + dataArray[i]);
 		var row = resultTable.insertRow(i);
 		var cell = row.insertCell(0);
 		cell.innerHTML = dataArray[i];
@@ -158,7 +168,7 @@ function renderList(data) {
 /*
  * Initialize start date picker
  */
-function initDate()
+function initDates()
 {
     var date = new Date();
     // DTSTART
@@ -174,6 +184,24 @@ function initDate()
 	var options = { hour12: false };
 	var timeString = date.toLocaleTimeString('default', options);
     document.getElementById('timeStart').value = timeString;
+    
+    //Stops the submit request
+    $("#rruleForm").submit(function(e){
+           e.preventDefault();
+    });
+}
+
+function buildHistories()
+{
+//	console.log('post RRULE' + formToJSON() + ipAddress);
+//	$.ajax({
+//		type: 'POST',
+//		contentType: 'application/json',
+//		url: rootURL,
+//		dataType: "text",
+//		data: formToJSON(),
+//		success: renderList
+//	});
 }
 
 // Entry point for refresh operation
