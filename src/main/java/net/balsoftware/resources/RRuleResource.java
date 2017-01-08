@@ -26,8 +26,8 @@ public class RRuleResource {
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 //	@Produces(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)
-//	public List<String> doPost(RRule request)
 	public String doPost(RRule request)
+//	public String doPost(RRule request)
 	{
 		DateTimeStart dateTimeStart = DateTimeStart.parse(request.getDtstartContent());
 //		int limit = Integer.parseInt(request.getMaxRecurrences());
@@ -38,7 +38,7 @@ public class RRuleResource {
 		recurrences = rrule.getValue().streamRecurrences(dateTimeStart.getValue())
 				.limit(limit)
 				.map(t -> t.toString())
-				.collect(Collectors.joining(LS));
+				.collect(Collectors.joining(","));
 		} catch (Exception e)
 		{
 			recurrences = "Invalid";

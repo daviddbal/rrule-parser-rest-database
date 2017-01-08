@@ -18,3 +18,17 @@ input {
 .options {
 	display: none;
 }
+
+table {
+    border-collapse: collapse;
+    border: 1px solid black;
+}
+
+table th {
+    border: 1px solid black;
+}
+
+table td {
+	padding-left: 10px;
+	padding-right: 10px;
+}

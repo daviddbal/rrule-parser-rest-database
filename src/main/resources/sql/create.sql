@@ -7,3 +7,5 @@ CREATE TABLE `rrule`.`history` (
   `created` DATETIME NOT NULL,
   `ip_address` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`uid`));
+CREATE USER 'rruleuser'@'%' IDENTIFIED BY 'rrulepassword';
+GRANT INSERT, SELECT, DELETE ON rrule.history TO 'rruleuser'@'%';

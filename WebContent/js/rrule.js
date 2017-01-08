@@ -78,13 +78,13 @@ function postRRule() {
 		url: rootURL,
 		dataType: "text",
 		data: formToJSON(),
-		success: renderList,
+		success: renderList
 //		success: function(data, textStatus, jqXHR){
 //			alert('RRULE created successfully');
 //		},
-		error: function(jqXHR, textStatus, errorThrown){
-			alert('RRULE error: ' + textStatus);
-		}
+//		error: function(jqXHR, textStatus, errorThrown){
+//			alert('RRULE error: ' + textStatus);
+//		}
 	});
 }
 
@@ -127,8 +127,28 @@ function formToJSON() {
 //}
 
 function renderList(data) {
-	console.log(data);
-	document.getElementById("result").innerHTML = data;
+//	console.log(data);
+//	var data2 = data.replace(/,/g, '<br>');
+//	document.getElementById("result").innerHTML = data2;
+
+	var dataArray = data.split(",");
+	console.log("dataArray.length:" + dataArray.length);
+	// TODO - DELETE ALL ROWS TO START FRESH
+	$('#resultTable tbody').empty();
+	var resultTable = document.getElementById("resultTableBody");
+	for(var i = 0; i< dataArray.length; i++)
+	{
+		console.log("list");
+		console.log(i + dataArray[i]);
+		var row = resultTable.insertRow(i);
+		var cell = row.insertCell(0);
+		cell.innerHTML = dataArray[i];
+	}
+
+	
+//	$('td').each(function(){
+//		   $(this).html('A' + $(this).html());
+//		});
 }
 
 /*

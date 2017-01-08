@@ -40,4 +40,19 @@ public class RRuleTest
     	test.setCreated(LocalDateTime.now());
     	service.addRRule(test);
     }
+    
+    @Test
+    public void canCreateUser()
+    {
+    	String user = "rruleuser";
+    	String URL = "%";
+    	String password = "rrulepassword";
+    	String database = "rrule";
+        final String createUser =
+                "CREATE USER '" + user + "'@'" + URL + "' IDENTIFIED BY '" + password + "';";
+        final String grantPrivilegesToUser =
+                "GRANT INSERT, SELECT, DELETE  ON " + database + ".* TO '" + user + "'@'" + URL + "';";
+        System.out.println(createUser);
+        System.out.println(grantPrivilegesToUser);
+    }
 }
