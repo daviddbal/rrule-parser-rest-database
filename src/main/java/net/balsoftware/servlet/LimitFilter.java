@@ -18,21 +18,31 @@ import javax.servlet.annotation.WebFilter;
  */
 @WebFilter(filterName="limitFilter", urlPatterns = {"/*"})
 public class LimitFilter implements Filter {
-    private int limit = 10;
+    private final static int REQUEST_LIMIT = 10;
     private int count;
     private Object lock = new Object();
+    private final static int RECURRENCE_LIMIT = 1000;
 
     @Override
 	public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain) throws IOException, ServletException
     {
-    	System.out.println("filter" + limit);
+//    	System.out.println("filter" + count);
         try {
             boolean ok;
             synchronized (lock) {
-                ok = count++ < limit;
+                ok = count++ < REQUEST_LIMIT;
             }
             if (ok) {
+            	String maxRecurrencesString = request.getParameter("maxRecurrences");
+            	if (maxRecurrencesString != null)
+            	{
+	            	int maxRecurrences = Integer.parseInt(maxRecurrencesString);
+	            	if (maxRecurrences > RECURRENCE_LIMIT)
+	            	{
+	            		throw new ServletException("Too Many Recurrences (must be <" + RECURRENCE_LIMIT + ")");
+	            	}
+            	}
                 // let the request through and process as usual
                 chain.doFilter(request, response);
             } else {

@@ -21,14 +21,19 @@ import net.balsoftware.service.RRuleService;
 @WebServlet("/RRuleServlet")
 public class RRuleServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-//	private static final String LS = "<br>";
 	private RRuleService service = new RRuleService();
 	
     @Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 //    	System.out.println("in servlet");
-
+//    	try {
+//			Thread.sleep(5000);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+    	
     	String rruleContent = request.getParameter("rrule");
 		int maxRecurrences = Integer.parseInt(request.getParameter("maxRecurrences"));
 		String dtstartContent = request.getParameter("dtstart");

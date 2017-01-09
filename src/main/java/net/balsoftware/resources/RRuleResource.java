@@ -24,13 +24,10 @@ public class RRuleResource {
 	
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-//	@Produces(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)
 	public String doPost(RRule request)
-//	public String doPost(RRule request)
 	{
 		DateTimeStart dateTimeStart = DateTimeStart.parse(request.getDtstartContent());
-//		int limit = Integer.parseInt(request.getMaxRecurrences());
 		int limit = request.getMaxRecurrences();
 		String recurrences;
 		try {
