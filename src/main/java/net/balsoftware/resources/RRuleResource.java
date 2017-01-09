@@ -17,6 +17,7 @@ import net.balsoftware.service.RRuleService;
  * Servlet implementation
  */
 @Path("/parse")
+@Deprecated
 public class RRuleResource {
 	private static final String LS = "<br>";
 	private RRuleService service = new RRuleService();

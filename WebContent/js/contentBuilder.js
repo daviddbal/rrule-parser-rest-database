@@ -118,7 +118,6 @@ function buildRRule()
         	document.getElementById('dayOfMonthCheckBox').checked = true;
         	dom = true;
 		}
-    	 console.log(date + ":" + dayOfWeek);
     	if (isDayOfWeekChecked)
 		{
     		var ordinal = weekOrdinalInMonth(date);
@@ -190,8 +189,6 @@ function makeDateTime(dateString, timeString)
 		var d = new Date();
 		var options = { hour12: false };
 		timeString = d.toLocaleTimeString('default', options);
-//		console.log("timeString:" + timeString);
-//		console.log(d.toLocaleTimeString('en-US', { hour12: false }));
 	}
 	return new Date(dateString + "T" + timeString);
 }
@@ -287,7 +284,6 @@ function weekOrdinalInMonth(date)
     var firstDayInMonth = new Date(date)
     firstDayInMonth.setDate(1);
     var testDate = firstDayInMonth;
-    console.log("ORDINAL:" + date + " " + firstDayInMonth);
     var ordinalWeekNumber = 0;
     while (testDate < date)
     {

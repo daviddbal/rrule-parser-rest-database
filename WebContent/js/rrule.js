@@ -5,8 +5,6 @@ var servletURL = "http://localhost:8080/RRuleRest1/RRuleServlet";
  */
 function getRecurrences()
 {
-	console.log('post RRULE servlet' + $("#rruleForm").serialize());
-		
 	$.ajax({
 		type: 'GET',
 		contentType: 'application/x-www-form-urlencoded',
@@ -28,9 +26,7 @@ function getIPAddress()
 {
 	$.get('http://jsonip.com/', function(r)
 			{
-				console.log(r.ip);
 				ipAddress = r.ip;
-				console.log("ip:" + ipAddress);
 			});
 }
 
@@ -40,7 +36,6 @@ function getIPAddress()
 function renderList(data)
 {
 	var dataArray = data.split(",");
-	console.log("dataArray.length:" + dataArray.length);
 	$('#resultTable tbody').empty();
 	var resultTable = document.getElementById("resultTableBody");
 	for(var i = 0; i< dataArray.length; i++)
@@ -54,7 +49,7 @@ function renderList(data)
 $( document ).ready(function()
 {
 	// Toggle between AJAX response to same page and regular GET response to new URL
-	document.getElementById("resultsPageCheckBox").onclick = function()
+	document.getElementById("resultsSamePageCheckBox").onclick = function()
 	{
 		toggleFormResult();
 	};
