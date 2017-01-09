@@ -1,5 +1,6 @@
 package net.balsoftware;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.sql.Connection;
@@ -40,7 +41,8 @@ public class RRuleTest
     	test.setDtstartContent("DTSTART;VALUE=DATE:20170101");
     	test.setMaxRecurrences(10);
     	test.setCreated(LocalDateTime.now());
-    	service.addRRule(test);
+    	RRule addedRRule = service.addRRule(test);
+    	assertEquals(addedRRule, test);
     }
     
     @Test
