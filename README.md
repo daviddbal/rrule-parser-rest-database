@@ -1,8 +1,10 @@
 # rrule-parser-rest-database
 
-A iCalendar RRULE parser using a simple Java servlet using iCalendarFX, a JavaScript control, AJAX asynchronous data transfer, a REST service and database persistence.
+A iCalendar RRULE parser with HTML controls handled by Javascript.
+
+It uses a simple Java servlet employing iCalendarFX, a iCalendarFx library written in Java (see JFXtras.org).  Logs of the requests are stored in a database.
 
 See RFC 5545 for more info about iCalendar.
 https://tools.ietf.org/html/rfc5545
 
-Uses iCalendarFx from jfxtras.org to parse the RRULE.
+Feel free to contact the author, David Bal, at david.ba37@gmail.com.
