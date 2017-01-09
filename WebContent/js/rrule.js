@@ -2,92 +2,98 @@ var ipAddress = null;
 /**
  * 
  */
-function loadXMLDoc() {
-//	if (ipAddress != null)
-//	{
-		var xmlhttp;
-		if (window.XMLHttpRequest) {
-			// code for IE7+, Firefox, Chrome, Opera, Safari
-			xmlhttp = new XMLHttpRequest();
-			} else {
-				xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-		}
-		xmlhttp.onreadystatechange = function() {
-			if (xmlhttp.readyState == 4) {
-				if (xmlhttp.status = 200){
-					document.getElementById("result").innerHTML = xmlhttp.responseText;
-					} else
-					{
-						alert("Action can't be performed");
-					}
-				}
-			};
-	
-		xmlhttp.open("POST", "webapi/parse");
-	//	xmlhttp.setRequestHeader('Content-type', "application/x-www-form-urlencoded");
-		xmlhttp.setRequestHeader('Content-type', "application/json");
-		var data = formToJSON();
-	//    var rruleContent = document.getElementById('rruleContent').value;
-	//    var dtstartContent = document.getElementById('dtstartContent').value;
-	//    var maxRecurrences = document.getElementById('maxRecurrences').value;
-		xmlhttp.send(data);
-//	xmlhttp.send("rruleContent=" + rruleContent + "&dtstartContent=" + dtstartContent + "&maxRecurrences=" + maxRecurrences);
-//	}
-}
-
-var rootURL = "http://localhost:8080/RRuleRest1/webapi/parse";
-
-/*
- * Submit RRULE and DTSTART
- */
-function postRRuleO() {
-	console.log('post RRULE' + formToJSON() + ipAddress);
-	$.ajax({
-		type: 'POST',
-		contentType: 'application/json',
-		data: formToJSON(),
-		url: rootURL,
-		dataType: "text",
-		success: renderList
-//		success: function(data, textStatus, jqXHR){
-//			alert('RRULE created successfully');
-//		},
-//		error: function(jqXHR, textStatus, errorThrown){
-//			alert('RRULE error: ' + textStatus);
+//function loadXMLDoc() {
+////	if (ipAddress != null)
+////	{
+//		var xmlhttp;
+//		if (window.XMLHttpRequest) {
+//			// code for IE7+, Firefox, Chrome, Opera, Safari
+//			xmlhttp = new XMLHttpRequest();
+//			} else {
+//				xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
 //		}
-	});
-}
+//		xmlhttp.onreadystatechange = function() {
+//			if (xmlhttp.readyState == 4) {
+//				if (xmlhttp.status = 200){
+//					document.getElementById("result").innerHTML = xmlhttp.responseText;
+//					} else
+//					{
+//						alert("Action can't be performed");
+//					}
+//				}
+//			};
+//	
+//		xmlhttp.open("POST", "webapi/parse");
+//	//	xmlhttp.setRequestHeader('Content-type', "application/x-www-form-urlencoded");
+//		xmlhttp.setRequestHeader('Content-type', "application/json");
+//		var data = formToJSON();
+//	//    var rruleContent = document.getElementById('rruleContent').value;
+//	//    var dtstartContent = document.getElementById('dtstartContent').value;
+//	//    var maxRecurrences = document.getElementById('maxRecurrences').value;
+//		xmlhttp.send(data);
+////	xmlhttp.send("rruleContent=" + rruleContent + "&dtstartContent=" + dtstartContent + "&maxRecurrences=" + maxRecurrences);
+////	}
+//}
+
+//var rootURL = "http://localhost:8080/RRuleRest1/webapi/parse";
+//
+///*
+// * Submit RRULE and DTSTART
+// */
+//function postRRuleO() {
+//	console.log('post RRULE' + formToJSON() + ipAddress);
+//	$.ajax({
+//		type: 'POST',
+//		contentType: 'application/json',
+//		data: formToJSON(),
+//		url: rootURL,
+//		dataType: "text",
+//		success: renderList
+////		success: function(data, textStatus, jqXHR){
+////			alert('RRULE created successfully');
+////		},
+////		error: function(jqXHR, textStatus, errorThrown){
+////			alert('RRULE error: ' + textStatus);
+////		}
+//	});
+//}
 
 var servletURL = "http://localhost:8080/RRuleRest1/RRuleServlet";
 
-function postRRulem() {
-	console.log('post RRULE servlet' + $("#rruleForm").val() + ", " + $("#rruleContent").val());
-	$.ajax({
-		type: 'POST',
-		contentType: 'application/x-www-form-urlencoded',
-		data: $("#rruleForm").serialize(),
-		url: rootURL,
-		dataType: "text",
-		success: renderList
-//		success: function(data, textStatus, jqXHR){
-//			alert('RRULE created successfully');
-//		},
-//		error: function(jqXHR, textStatus, errorThrown){
-//			alert('RRULE error: ' + textStatus);
-//		}
-	});
-}
+//function postRRulem() {
+//	console.log('post RRULE servlet' + $("#rruleForm").val() + ", " + $("#rruleContent").val());
+//	$.ajax({
+//		type: 'POST',
+//		contentType: 'application/x-www-form-urlencoded',
+//		data: $("#rruleForm").serialize(),
+//		url: rootURL,
+//		dataType: "text",
+//		success: renderList
+////		success: function(data, textStatus, jqXHR){
+////			alert('RRULE created successfully');
+////		},
+////		error: function(jqXHR, textStatus, errorThrown){
+////			alert('RRULE error: ' + textStatus);
+////		}
+//	});
+//}
 
-function postRRule()
+/*
+ * Get list of recurrences for the RRULE from servlet
+ */
+function getRecurrences()
 {
-//	console.log('post RRULE servlet' + $("#rruleForm").serialize());
+	console.log('post RRULE servlet' + $("#rruleForm").serialize());
 		
 	$.ajax({
-		type: 'POST',
+		type: 'GET',
 		contentType: 'application/x-www-form-urlencoded',
 		data: $("#rruleForm").serialize(),
 		url: servletURL,
 		dataType: "text",
+		beforeSend: function(request) {
+		    request.setRequestHeader("X-FORWARDED-FOR", ipAddress);
+		  },
 		success: renderList
 //		success: function(data, textStatus, jqXHR){
 //			alert('RRULE created successfully');
@@ -104,28 +110,21 @@ function getIPAddress()
 			{
 				console.log(r.ip);
 				ipAddress = r.ip;
+				console.log("ip:" + ipAddress);
+//				buildHistories();
 			});
 }
 
-//Helper function to serialize all the form fields into a JSON string
-function formToJSON() {
-	if (ipAddress === null)
-	{
-		$.get('http://jsonip.com/', function(r)
-				{
-					console.log(r.ip);
-					ipAddress = r.ip;
-				});
-	}
-	console.log('ip:' + ipAddress);
-	console.log($('#rruleContent').val());
-	return JSON.stringify({
-		"rruleContent": $('#rruleContent').val(), 
-		"dtstartContent": $('#dtstartContent').val(),
-		"maxRecurrences": $('#maxRecurrences').val(),
-		"ipAddress": ipAddress
-		});
-}
+////Helper function to serialize all the form fields into a JSON string
+//function formToJSON() {
+//	console.log($('#rruleContent').val());
+//	return JSON.stringify({
+//		"rruleContent": $('#rruleContent').val(), 
+//		"dtstartContent": $('#dtstartContent').val(),
+//		"maxRecurrences": $('#maxRecurrences').val(),
+//		"ipAddress": ipAddress
+//		});
+//}
 
 //function findAll() {
 //	console.log('findAll');
@@ -140,25 +139,59 @@ function formToJSON() {
 //	});
 //}
 
-function renderList(data) {
+function renderList(data)
+{
 	var dataArray = data.split(",");
 	console.log("dataArray.length:" + dataArray.length);
-	// TODO - DELETE ALL ROWS TO START FRESH
 	$('#resultTable tbody').empty();
 	var resultTable = document.getElementById("resultTableBody");
 	for(var i = 0; i< dataArray.length; i++)
 	{
-//		console.log("list");
-//		console.log(i + dataArray[i]);
 		var row = resultTable.insertRow(i);
 		var cell = row.insertCell(0);
 		cell.innerHTML = dataArray[i];
 	}
+}
 
-	
-//	$('td').each(function(){
-//		   $(this).html('A' + $(this).html());
-//		});
+///*
+// * Toggle between AJAX response to same page and regular GET response to new URL
+// */
+//toggleResultsPage(isResultsOnSamePage)
+//{
+//	var isResultsOnSamePage = document.getElementById('resultsPageCheckBox').value;
+//	if (isResultsOnSamePage)
+//	{
+//	    //Stops the submit request
+//	    $("#rruleForm").submit(function(e){
+//	           e.preventDefault();
+//	    });
+//	}
+//}
+
+$( document ).ready(function()
+{
+	console.log("regisger click listener");
+	// add onclick listener to resultsPageCheckBox
+	// Toggle between AJAX response to same page and regular GET response to new URL
+	document.getElementById("resultsPageCheckBox").onclick = function()
+	{
+		toggleFormResult();
+	};
+});
+
+function toggleFormResult()
+{
+	var isClicked = document.getElementById("resultsPageCheckBox").checked;
+	if (isClicked)
+	{
+	    //Stops the submit request
+		$('#rruleForm').click(function(event) { // prevent default form post
+		    event.preventDefault();
+		});
+	} else
+	{
+		$('#rruleForm').unbind('click');
+	}
 }
 
 /*
@@ -185,24 +218,24 @@ function initDates()
 	var timeString = date.toLocaleTimeString('default', options);
     document.getElementById('timeStart').value = timeString;
     
-    //Stops the submit request
-    $("#rruleForm").submit(function(e){
-           e.preventDefault();
-    });
+//    //Stops the submit request
+//    $("#rruleForm").submit(function(e){
+//           e.preventDefault();
+//    });
 }
 
-function buildHistories()
-{
-//	console.log('post RRULE' + formToJSON() + ipAddress);
-//	$.ajax({
-//		type: 'POST',
-//		contentType: 'application/json',
-//		url: rootURL,
-//		dataType: "text",
-//		data: formToJSON(),
-//		success: renderList
-//	});
-}
+//function buildHistories()
+//{
+////	console.log('post RRULE' + formToJSON() + ipAddress);
+////	$.ajax({
+////		type: 'POST',
+////		contentType: 'application/json',
+////		url: rootURL,
+////		dataType: "text",
+////		data: formToJSON(),
+////		success: renderList
+////	});
+//}
 
 // Entry point for refresh operation
 function refreshRRuleAndDTStart()

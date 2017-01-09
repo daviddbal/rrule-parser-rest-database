@@ -22,11 +22,12 @@
 		This application can be used two ways:
 		<ol>
 		 	<li>Modify the controls found in the first box such as repeat frequency, start date, etc.  When they are changed the RRULE and DTSTART properties will automatically modified accordingly.</li>
-		 	<li>Type in a RRULE and DTSTART property manually.  While the controls mentioned above provide only a subset of the <a href="https://tools.ietf.org/html/rfc5545">RFC 5545</a> RRULE elements, you can use all RRULE elements by typing the property manually.  Manual changes to the RRULE and DTSTART fields do not change the control's settings.</li>
+		 	<li>Type in a RRULE and DTSTART property manually.  While the controls only handle a subset of the <a href="https://tools.ietf.org/html/rfc5545">RFC 5545</a> RRULE elements, you can use all RRULE elements by typing the property manually.  Manual changes to the RRULE and DTSTART fields do not change the control's settings.</li>
 	 	</ol>
 	 	If you have any comments please feel free to send me an email at <a href="mailto:david.bal37@gmail.com">david.bal37@gmail.com</a>
 	</p>
 
+	Post results on same page<input type="checkbox" id="resultsPageCheckBox" checked>	
 	<div id="builderControl">
 		Repeat Frequency:
 		<select required id="freq" onchange="buildRRule()">
@@ -75,12 +76,12 @@
   		</span>
 	</div>
 	
- 	<form id="rruleForm">
+ 	<form id="rruleForm" action="RRuleServlet" method="get">
 		<div id="rrule">
-			RRULE <input type="text" size="53" id="rruleContent" name="rruleContent" value="RRULE:FREQ=DAILY" ><br>
-			DTSTART <input type="text" size="50" id="dtstartContent" name="dtstartContent" value="DTSTART:20170101T120000" ><br>
+			RRULE <input type="text" size="53" id="rruleContent" name="rrule" value="RRULE:FREQ=DAILY" ><br>
+			DTSTART <input type="text" size="50" id="dtstartContent" name="dtstart" value="DTSTART:20170101T120000" ><br>
 			Max Recurrences Displayed<input type="number" id="maxRecurrences" name="maxRecurrences" min="1" max="1000" value="50"><br>
-			<button id="submitButton" onclick="postRRule()">Submit</button>
+			<button id="submitButton" onclick="getRecurrences()">Submit</button>
 		</div>
 	</form>
 	<br>
@@ -89,9 +90,9 @@
 	<script type="text/javascript">
 		initDates();
 		refreshRRuleAndDTStart();
-		postRRule()
+		getRecurrences()
 		getIPAddress();
-		buildHistories();
+		toggleFormResult();
 	</script>
 	<h3>Resulting Recurrences Series:</h3>
 	<table id="resultTable">

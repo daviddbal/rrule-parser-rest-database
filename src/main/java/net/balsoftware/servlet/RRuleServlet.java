@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import jfxtras.icalendarfx.properties.component.recurrence.RecurrenceRule;
 import jfxtras.icalendarfx.properties.component.time.DateTimeStart;
+import net.balsoftware.bean.RRule;
+import net.balsoftware.service.RRuleService;
 
 /**
  * Servlet implementation
@@ -19,22 +21,37 @@ import jfxtras.icalendarfx.properties.component.time.DateTimeStart;
 @WebServlet("/RRuleServlet")
 public class RRuleServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final String LS = "<br>";
+//	private static final String LS = "<br>";
+	private RRuleService service = new RRuleService();
 	
     @Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-    	String rruleContent = request.getParameter("rruleContent");
-		int limit = Integer.parseInt(request.getParameter("maxRecurrences"));
-		DateTimeStart dateTimeStart = DateTimeStart.parse(request.getParameter("dtstartContent"));
-		
+//    	System.out.println("in servlet");
+
+    	String rruleContent = request.getParameter("rrule");
+		int maxRecurrences = Integer.parseInt(request.getParameter("maxRecurrences"));
+		String dtstartContent = request.getParameter("dtstart");
+		DateTimeStart dateTimeStart = DateTimeStart.parse(dtstartContent);
+		String ipAddress = request.getHeader("X-FORWARDED-FOR");  
+	       if (ipAddress == null) {  
+	         ipAddress = request.getRemoteAddr();  
+	   }
+	
 		String recurrences;
 		try {
-		RecurrenceRule rrule = RecurrenceRule.parse(rruleContent);
-		recurrences = rrule.getValue().streamRecurrences(dateTimeStart.getValue())
-				.limit(limit)
-				.map(t -> t.toString())
-				.collect(Collectors.joining(LS));
+			RecurrenceRule rrule = RecurrenceRule.parse(rruleContent);
+			recurrences = rrule.getValue().streamRecurrences(dateTimeStart.getValue())
+					.limit(maxRecurrences)
+					.map(t -> t.toString())
+					.collect(Collectors.joining(","));
+//	System.out.println(ipAddress);
+			// Store request in database if ip is not null
+			if ((ipAddress != null) && ! ipAddress.equals("null"))
+			{
+				RRule r = new RRule(rruleContent, dtstartContent, maxRecurrences, ipAddress);
+				service.addRRule(r);
+			}
 		} catch (Exception e)
 		{
 			recurrences = "Invalid";
@@ -44,20 +61,4 @@ public class RRuleServlet extends HttpServlet {
 //		out.print("Recurrence Series:" + LS + rrules);
 		out.print(recurrences);
 	}
-
-//	/**
-//     * @see HttpServlet#HttpServlet()
-//     */
-//    public RRuleServlet() {
-//        super();
-//    }
-//
-//	/**
-//	 * @see Servlet#init(ServletConfig)
-//	 */
-//	@Override
-//	public void init(ServletConfig config) throws ServletException {
-//		// TODO Auto-generated method stub
-//	}
-
 }
